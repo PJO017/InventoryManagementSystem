@@ -1,5 +1,12 @@
-version: '3.8'
 services:
+  app:
+    image: inventorymanagementsystem
+    ports:
+        - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/inventorydb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
   db:
     image: postgres:latest
     environment:

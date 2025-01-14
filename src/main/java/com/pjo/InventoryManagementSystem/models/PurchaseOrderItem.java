@@ -1,25 +1,25 @@
+package com.pjo.InventoryManagementSystem.models;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
-public class User {
+public class PurchaseOrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(nullable = false, unique = true, length = 50)
-    private String username;
+    @ManyToOne
+    private PurchaseOrder purchaseOrder;
 
-    @Column(nullable = false, length = 255)
-    private String password;
-
-    @Column(nullable = false, length = 50)
-    private String role;
+    @ManyToOne
+    private Product product;
 
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -40,4 +40,9 @@ public class User {
         updatedAt = LocalDateTime.now();
     }
 
+    @Column(nullable = false)
+    private int quantity;
+
+    @Column(nullable = false)
+    private BigDecimal price;
 }

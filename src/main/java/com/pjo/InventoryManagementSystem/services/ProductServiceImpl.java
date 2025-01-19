@@ -1,6 +1,7 @@
 package com.pjo.InventoryManagementSystem.services;
 
 import com.pjo.InventoryManagementSystem.dto.ProductDTO;
+import com.pjo.InventoryManagementSystem.exceptions.ResourceNotFoundException;
 import com.pjo.InventoryManagementSystem.models.Product;
 import com.pjo.InventoryManagementSystem.repos.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Product getProductById(Long id) {
-        return productRepository.findById(id).orElseThrow();
+        return productRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("Product not found with id: " + id)
+        );
     }
 
     public Product createProduct(ProductDTO productDTO) {
@@ -33,7 +36,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Product updateProduct(Long id, ProductDTO productDTO) {
-         Product product = productRepository.findById(id).orElseThrow();
+         Product product = productRepository.findById(id).orElseThrow(
+            () -> new ResourceNotFoundException("Product not found with id: " + id)
+         );
 
          if (productDTO.getName() != null) {
              product.setName(productDTO.getName());
@@ -55,6 +60,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Product not found with id: " + id);
+        }
         productRepository.deleteById(id);
     }
 }

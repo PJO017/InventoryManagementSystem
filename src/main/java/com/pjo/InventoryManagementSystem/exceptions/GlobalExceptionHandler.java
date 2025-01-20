@@ -1,5 +1,7 @@
 package com.pjo.InventoryManagementSystem.exceptions;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiError> handleResourceNotFoundException(ResourceNotFoundException ex, HttpServletRequest request) {
         ApiError error = new ApiError(
@@ -24,6 +28,9 @@ public class GlobalExceptionHandler {
                 ex.getMessage(),
                 request.getRequestURI()
         );
+
+        logger.error("Resource not found: {}", ex.getMessage());
+        logger.debug("Request URI: {}", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
@@ -36,6 +43,8 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
         );
 
+        logger.error("Invalid path variable: {}", ex.getMessage());
+        logger.debug("Request URI: {}", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
@@ -47,6 +56,9 @@ public class GlobalExceptionHandler {
                 "Database access error occurred",
                 request.getRequestURI()
         );
+
+        logger.error("Data access error: {}", ex.getMessage());
+        logger.debug("Request URI: {}", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
@@ -58,6 +70,9 @@ public class GlobalExceptionHandler {
                 "JPA system error occurred",
                 request.getRequestURI()
         );
+
+        logger.error("JPA system error: {}", ex.getMessage());
+        logger.debug("Request URI: {}", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
@@ -69,6 +84,9 @@ public class GlobalExceptionHandler {
                 "Persistence error occurred",
                 request.getRequestURI()
         );
+
+        logger.error("Persistence error: {}", ex.getMessage());
+        logger.debug("Request URI: {}", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
@@ -80,6 +98,9 @@ public class GlobalExceptionHandler {
                 "Transaction error occurred",
                 request.getRequestURI()
         );
+
+        logger.error("Transaction error: {}", ex.getMessage());
+        logger.debug("Request URI: {}", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
@@ -91,6 +112,9 @@ public class GlobalExceptionHandler {
                 ex.getMessage(),
                 request.getRequestURI()
         );
+
+        logger.error("Illegal argument: {}", ex.getMessage());
+        logger.debug("Request URI: {}", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
@@ -102,6 +126,9 @@ public class GlobalExceptionHandler {
                 "An unexpected error occurred",
                 request.getRequestURI()
         );
+
+        logger.error("Unexpected error: {}", ex.getMessage());
+        logger.debug("Request URI: {}", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }

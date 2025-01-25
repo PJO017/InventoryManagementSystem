@@ -72,7 +72,6 @@ public class PurchaseOrderControllerTest {
 
     @Test
     public void testSavePurchaseOrder() throws Exception {
-        PurchaseOrderDTO purchaseOrderDTO = new PurchaseOrderDTO();
         PurchaseOrder purchaseOrder = new PurchaseOrder();
         when(purchaseOrderService.createPurchaseOrder(any(PurchaseOrderDTO.class))).thenReturn(purchaseOrder);
 
@@ -87,7 +86,6 @@ public class PurchaseOrderControllerTest {
 
     @Test
     public void testUpdatePurchaseOrder() throws Exception {
-        PurchaseOrderDTO purchaseOrderDTO = new PurchaseOrderDTO();
         PurchaseOrder updatedOrder = new PurchaseOrder();
         when(purchaseOrderService.updatePurchaseOrder(eq(1L), any(PurchaseOrderDTO.class))).thenReturn(updatedOrder);
 

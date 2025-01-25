@@ -23,7 +23,7 @@ public class PurchaseOrder {
     private Long id;
 
     @Column(nullable = false, length = 50)
-    private String status;
+    private PurchaseOrderStatus status;
 
     @Column(nullable = false)
     private Double totalAmount;
@@ -45,6 +45,8 @@ public class PurchaseOrder {
         orderDate = LocalDateTime.now();
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
+        status = PurchaseOrderStatus.DRAFT;
+        totalAmount = 0.0;
     }
 
     @PreUpdate

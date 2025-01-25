@@ -34,6 +34,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(DatabaseOperationeException.class)
+    public ResponseEntity<ApiError> handleDatabaseOperationeException(DatabaseOperationeException ex, HttpServletRequest request) {
+        ApiError error = new ApiError(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Internal Server Error",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+
+        logger.error("Database operation error: {}", ex.getMessage());
+        logger.debug("Request URI: {}", request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ApiError> handleInvalidPathVariable(MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
         ApiError error = new ApiError(
@@ -53,7 +67,7 @@ public class GlobalExceptionHandler {
         ApiError error = new ApiError(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal Server Error",
-                "Database access error occurred",
+                "Database access error occurred " + ex.getMessage(),
                 request.getRequestURI()
         );
 
@@ -67,7 +81,7 @@ public class GlobalExceptionHandler {
         ApiError error = new ApiError(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal Server Error",
-                "JPA system error occurred",
+                "JPA system error occurred " + ex.getMessage(),
                 request.getRequestURI()
         );
 
@@ -81,7 +95,7 @@ public class GlobalExceptionHandler {
         ApiError error = new ApiError(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal Server Error",
-                "Persistence error occurred",
+                "Persistence error occurred " + ex.getMessage(),
                 request.getRequestURI()
         );
 
@@ -95,7 +109,7 @@ public class GlobalExceptionHandler {
         ApiError error = new ApiError(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal Server Error",
-                "Transaction error occurred",
+                "Transaction error occurred " + ex.getMessage(),
                 request.getRequestURI()
         );
 

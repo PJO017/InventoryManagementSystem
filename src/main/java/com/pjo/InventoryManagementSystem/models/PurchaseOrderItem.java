@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,6 +19,9 @@ public class PurchaseOrderItem {
 
     @ManyToOne
     private Product product;
+
+    @Column(nullable = false)
+    private int quantity;
 
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -40,9 +42,12 @@ public class PurchaseOrderItem {
         updatedAt = LocalDateTime.now();
     }
 
-    @Column(nullable = false)
-    private int quantity;
+    public PurchaseOrderItem() {
+    }
 
-    @Column(nullable = false)
-    private BigDecimal price;
+    public PurchaseOrderItem(PurchaseOrder purchaseOrder, Product product, int quantity) {
+        this.purchaseOrder = purchaseOrder;
+        this.product = product;
+        this.quantity = quantity;
+    }
 }

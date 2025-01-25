@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.pjo.InventoryManagementSystem.dto.PurchaseOrderDTO;
 import com.pjo.InventoryManagementSystem.dto.PurchaseOrderItemDTO;
-import com.pjo.InventoryManagementSystem.exceptions.DatabaseOperationeException;
+import com.pjo.InventoryManagementSystem.exceptions.DatabaseOperationException;
 import com.pjo.InventoryManagementSystem.exceptions.ResourceNotFoundException;
 import com.pjo.InventoryManagementSystem.models.Product;
 import com.pjo.InventoryManagementSystem.models.PurchaseOrder;
@@ -78,7 +78,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
                     .save(new PurchaseOrderItem(purchaseOrder, product, purchaseOrderItemDTO.getQuantity()));
         } catch (Exception e) {
             logger.error("Error creating purchase order item: {}", e.getMessage());
-            throw new DatabaseOperationeException(
+            throw new DatabaseOperationException(
                     "Error creating purchase order item: " + e.getMessage());
         }
     }

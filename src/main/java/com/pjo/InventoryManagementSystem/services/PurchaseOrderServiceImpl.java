@@ -1,6 +1,8 @@
 package com.pjo.InventoryManagementSystem.services;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -114,21 +116,46 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         logger.info("Updating purchase order with id: {}", id);
 
         PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Purchase Order not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Purchase Order not found with id: " + id));
 
-        purchaseOrderItemRepository.deleteByPurchaseOrderId(purchaseOrder.getId());
+        if (purchaseOrderDTO.getItems() != null && !purchaseOrderDTO.getItems().isEmpty()) {
+            List<PurchaseOrderItem> existingItems = purchaseOrderItemRepository.findByPurchaseOrderId(purchaseOrder.getId());
+            Map<Long, PurchaseOrderItem> existingItemsMap = existingItems.stream()
+                    .collect(Collectors.toMap(PurchaseOrderItem::getId, item -> item));
 
-        List<PurchaseOrderItem> updatedItems = purchaseOrderDTO.getItems().stream()
-                .map(itemDTO -> createValidatedPurchaseOrderItem(purchaseOrder, itemDTO))
-                .collect(Collectors.toList());
+            List<PurchaseOrderItem> updatedItems = new ArrayList<>();
 
-        purchaseOrderItemRepository.saveAll(updatedItems);
+            for (PurchaseOrderItemDTO itemDTO : purchaseOrderDTO.getItems()) {
+                PurchaseOrderItem item;
+                if (itemDTO.getId() != null && existingItemsMap.containsKey(itemDTO.getId())) {
+                    // Update existing item
+                    item = existingItemsMap.get(itemDTO.getId());
+                    item.setQuantity(itemDTO.getQuantity());
+                    item.setProduct(productRepository.findById(itemDTO.getProductId())
+                            .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + itemDTO.getProductId())));
+                    existingItemsMap.remove(itemDTO.getId());
+                } else {
+                    // Create new item
+                    item = createValidatedPurchaseOrderItem(purchaseOrder, itemDTO);
+                }
+                logger.info("Updated item: {}", item);
+                updatedItems.add(item);
+            }
 
-        double totalAmount = updatedItems.stream()
-                .mapToDouble(item -> item.getProduct().getPrice().doubleValue() * item.getQuantity())
-                .sum();
-        purchaseOrder.setTotalAmount(totalAmount);
+            // Delete items that are no longer in the request
+            for (PurchaseOrderItem item : existingItemsMap.values()) {
+                purchaseOrderItemRepository.delete(item);
+            }
+
+            // Save updated and new items
+            purchaseOrderItemRepository.saveAll(updatedItems);
+
+            // Update the total amount
+            double totalAmount = updatedItems.stream()
+                    .mapToDouble(item -> item.getProduct().getPrice().doubleValue() * item.getQuantity())
+                    .sum();
+            purchaseOrder.setTotalAmount(totalAmount);
+        }
 
         return purchaseOrderRepository.save(purchaseOrder);
     }

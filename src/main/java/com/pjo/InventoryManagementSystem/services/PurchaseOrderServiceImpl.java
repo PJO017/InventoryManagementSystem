@@ -147,6 +147,15 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
                 purchaseOrderItemRepository.delete(item);
             }
 
+            if (purchaseOrderDTO.getStatus() != null) {
+                try {
+                    purchaseOrder.setStatus(purchaseOrderDTO.getStatus());
+                } catch (IllegalArgumentException e) {
+                    logger.error("Invalid status: {}", purchaseOrderDTO.getStatus());
+                    throw new IllegalArgumentException("Invalid status: " + purchaseOrderDTO.getStatus());
+                }
+            }
+
             // Save updated and new items
             purchaseOrderItemRepository.saveAll(updatedItems);
 

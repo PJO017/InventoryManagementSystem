@@ -1,124 +1,232 @@
 components:
     schemas:
         Account:
+            description: Represents a user account in the system.
             properties:
                 createdAt:
+                    description: Timestamp when the account was created.
                     type: string
                 id:
+                    description: Unique identifier for the account.
                     type: integer
                 password:
+                    description: Hashed password for authentication.
+                    maxLength: 255
+                    minLength: 6
                     type: string
                 role:
+                    description: Role of the user (e.g., ADMIN, USER).
+                    maxLength: 50
+                    minLength: 2
                     type: string
                 updatedAt:
+                    description: Timestamp when the account was last updated.
                     type: string
                 username:
+                    description: Unique username for login.
+                    maxLength: 50
+                    minLength: 3
                     type: string
+            required:
+                - username
+                - password
+                - role
             type: object
         ApiError:
+            description: DTO representing an API error response.
             properties:
                 error:
+                    description: Error type or summary.
                     type: string
                 message:
+                    description: Detailed error message.
                     type: string
                 path:
+                    description: Request path where the error occurred.
                     type: string
                 status:
+                    description: HTTP status code.
                     type: integer
                 timestamp:
+                    description: Time when the error occurred.
                     type: string
+            required:
+                - status
+                - error
+                - message
+                - path
+                - timestamp
             type: object
         ApiResponse:
+            description: Generic DTO for API responses.
             properties:
+                data:
+                    description: Response data payload.
+                    type: string
                 message:
+                    description: Additional message.
                     type: string
                 status:
+                    description: Status of the response (e.g., "success", "error").
                     type: string
                 timestamp:
+                    description: Time when the response was generated.
                     type: string
-            type: object
-        GlobalExceptionHandler:
-            properties: {}
+            required:
+                - status
+                - timestamp
             type: object
         Product:
+            description: Represents a product in the inventory.
             properties:
                 createdAt:
+                    description: Timestamp when the product was created.
                     type: string
                 description:
+                    description: Description of the product.
+                    maxLength: 255
                     type: string
                 id:
+                    description: Unique identifier for the product.
                     type: integer
                 name:
+                    description: Name of the product.
+                    maxLength: 100
+                    minLength: 1
                     type: string
                 price:
+                    description: Price per unit.
                     type: number
                 stockQuantity:
+                    description: Number of units in stock.
+                    minimum: 0
                     type: integer
                 updatedAt:
+                    description: Timestamp when the product was last updated.
                     type: string
+            required:
+                - name
+                - price
+                - stockQuantity
             type: object
         ProductDTO:
+            description: DTO for transferring product data.
             properties:
                 description:
+                    description: Description of the product.
+                    maxLength: 255
                     type: string
                 name:
+                    description: Name of the product.
+                    maxLength: 100
+                    minLength: 1
                     type: string
                 price:
+                    description: Price per unit.
                     type: number
                 stockQuantity:
+                    description: Number of units in stock.
+                    minimum: 0
                     type: integer
+            required:
+                - name
+                - price
+                - stockQuantity
             type: object
         PurchaseOrder:
+            description: Represents a purchase order in the system.
             properties:
                 createdAt:
+                    description: Timestamp when the order was created.
                     type: string
                 id:
+                    description: Unique identifier for the purchase order.
                     type: integer
                 orderDate:
+                    description: Date/time when the order was placed.
                     type: string
                 status:
                     $ref: '#/components/schemas/PurchaseOrderStatus'
+                    description: Status of the purchase order (see PurchaseOrderStatus).
                 totalAmount:
+                    description: Total amount for the order.
+                    minimum: 0
                     type: number
                 updatedAt:
+                    description: Timestamp when the order was last updated.
                     type: string
+            required:
+                - status
+                - totalAmount
+                - orderDate
+                - createdAt
+                - updatedAt
             type: object
         PurchaseOrderDTO:
+            description: DTO for transferring purchase order data.
             properties:
                 items:
+                    description: List of purchase order items.
                     items:
                         $ref: '#/components/schemas/PurchaseOrderItemDTO'
                     type: array
                 status:
                     $ref: '#/components/schemas/PurchaseOrderStatus'
+                    description: Status of the purchase order.
+            required:
+                - status
+                - items
             type: object
         PurchaseOrderItem:
+            description: Represents an item within a purchase order.
             properties:
                 createdAt:
+                    description: Timestamp when the item was created.
                     type: string
                 id:
+                    description: Unique identifier for the item.
                     type: integer
                 product:
                     $ref: '#/components/schemas/Product'
+                    description: Reference to the product being ordered.
                 purchaseOrder:
                     $ref: '#/components/schemas/PurchaseOrder'
+                    description: Reference to the parent purchase order.
                 quantity:
+                    description: Quantity of the product ordered.
+                    minimum: 1
                     type: integer
                 updatedAt:
+                    description: Timestamp when the item was last updated.
                     type: string
+            required:
+                - purchaseOrder
+                - product
+                - quantity
             type: object
         PurchaseOrderItemDTO:
+            description: DTO for transferring purchase order item data.
             properties:
                 id:
+                    description: Item identifier.
                     type: integer
                 productId:
+                    description: ID of the product.
                     type: integer
                 purchaseOrderId:
+                    description: ID of the parent purchase order.
                     type: integer
                 quantity:
+                    description: Quantity ordered.
+                    minimum: 1
                     type: integer
+            required:
+                - purchaseOrderId
+                - productId
+                - quantity
             type: object
         PurchaseOrderStatus:
+            description: Enum representing the status of a purchase order.
             enum:
                 - DRAFT
                 - SUBMITTED
@@ -128,17 +236,28 @@ components:
                 - CANCELED
             type: string
         Supplier:
+            description: Represents a supplier entity in the system.
             properties:
                 contactInfo:
+                    description: Contact information for the supplier.
+                    maxLength: 255
                     type: string
                 createdAt:
+                    description: Timestamp when the supplier was created.
                     type: string
                 id:
+                    description: Unique identifier for the supplier.
                     type: integer
                 name:
+                    description: Name of the supplier.
+                    maxLength: 100
+                    minLength: 1
                     type: string
                 updatedAt:
+                    description: Timestamp when the supplier was last updated.
                     type: string
+            required:
+                - name
             type: object
 info:
     title: API
@@ -147,6 +266,7 @@ openapi: 3.0.0
 paths:
     /api/products:
         get:
+            description: Retrieves all products.
             parameters: []
             responses:
                 "200":
@@ -161,7 +281,9 @@ paths:
                                                 $ref: '#/components/schemas/Product'
                                             type: array
                     description: Successful Response
+            summary: Retrieves all products.
         post:
+            description: Creates a new product.
             parameters: []
             requestBody:
                 content:
@@ -180,8 +302,10 @@ paths:
                                         data:
                                             $ref: '#/components/schemas/Product'
                     description: Successful Response
+            summary: Creates a new product.
     /api/products/{id}:
         delete:
+            description: Deletes a product by its ID.
             parameters:
                 - in: path
                   name: id
@@ -195,7 +319,9 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/ApiResponse'
                     description: Successful Response
+            summary: Deletes a product by its ID.
         get:
+            description: Retrieves a product by its ID.
             parameters:
                 - in: path
                   name: id
@@ -213,7 +339,9 @@ paths:
                                         data:
                                             $ref: '#/components/schemas/Product'
                     description: Successful Response
+            summary: Retrieves a product by its ID.
         put:
+            description: Updates an existing product by its ID.
             parameters:
                 - in: path
                   name: id
@@ -237,8 +365,10 @@ paths:
                                         data:
                                             $ref: '#/components/schemas/Product'
                     description: Successful Response
+            summary: Updates an existing product by its ID.
     /api/purchase-orders:
         get:
+            description: Retrieves all purchase orders.
             parameters: []
             responses:
                 "200":
@@ -253,7 +383,9 @@ paths:
                                                 $ref: '#/components/schemas/PurchaseOrder'
                                             type: array
                     description: Successful Response
+            summary: Retrieves all purchase orders.
         post:
+            description: Creates a new purchase order.
             parameters: []
             requestBody:
                 content:
@@ -272,8 +404,10 @@ paths:
                                         data:
                                             $ref: '#/components/schemas/PurchaseOrder'
                     description: Successful Response
+            summary: Creates a new purchase order.
     /api/purchase-orders/{id}:
         delete:
+            description: Deletes a purchase order by its ID.
             parameters:
                 - in: path
                   name: id
@@ -287,7 +421,9 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/ApiResponse'
                     description: Successful Response
+            summary: Deletes a purchase order by its ID.
         get:
+            description: Retrieves a purchase order by its ID.
             parameters:
                 - in: path
                   name: id
@@ -305,7 +441,9 @@ paths:
                                         data:
                                             $ref: '#/components/schemas/PurchaseOrder'
                     description: Successful Response
+            summary: Retrieves a purchase order by its ID.
         put:
+            description: Updates an existing purchase order by its ID.
             parameters:
                 - in: path
                   name: id
@@ -329,8 +467,10 @@ paths:
                                         data:
                                             $ref: '#/components/schemas/PurchaseOrder'
                     description: Successful Response
+            summary: Updates an existing purchase order by its ID.
     /api/purchase-orders/{id}/items:
         get:
+            description: Retrieves all items for a specific purchase order.
             parameters:
                 - in: path
                   name: id
@@ -350,5 +490,6 @@ paths:
                                                 $ref: '#/components/schemas/PurchaseOrderItemDTO'
                                             type: array
                     description: Successful Response
+            summary: Retrieves all items for a specific purchase order.
 servers:
     - url: https://api.example.com

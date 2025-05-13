@@ -1,6 +1,8 @@
 package com.pjo.InventoryManagementSystem.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,12 +25,15 @@ public class Supplier {
     /**
      * Name of the supplier.
      */
+    @NotNull
+    @Size(min = 1, max = 100)
     @Column(nullable = false, length = 100)
     private String name;
 
     /**
      * Contact information for the supplier.
      */
+    @Size(max = 255)
     private String contactInfo;
 
     /**

@@ -11,6 +11,8 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,18 +33,22 @@ public class PurchaseOrder {
     /**
      * Status of the purchase order (see PurchaseOrderStatus).
      */
+    @NotNull
     @Column(nullable = false, length = 50)
     private PurchaseOrderStatus status;
 
     /**
      * Total amount for the order.
      */
+    @NotNull
+    @Min(0)
     @Column(nullable = false)
     private Double totalAmount;
 
     /**
      * Date/time when the order was placed.
      */
+    @NotNull
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime orderDate;
@@ -50,6 +56,7 @@ public class PurchaseOrder {
     /**
      * Timestamp when the order was created.
      */
+    @NotNull
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
@@ -57,6 +64,7 @@ public class PurchaseOrder {
     /**
      * Timestamp when the order was last updated.
      */
+    @NotNull
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;

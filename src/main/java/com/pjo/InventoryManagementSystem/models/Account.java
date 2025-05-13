@@ -1,6 +1,8 @@
 package com.pjo.InventoryManagementSystem.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,18 +25,24 @@ public class Account {
     /**
      * Unique username for login.
      */
+    @NotNull
+    @Size(min = 3, max = 50)
     @Column(nullable = false, unique = true, length = 50)
     private String username;
 
     /**
      * Hashed password for authentication.
      */
+    @NotNull
+    @Size(min = 6, max = 255)
     @Column(nullable = false, length = 255)
     private String password;
 
     /**
      * Role of the user (e.g., ADMIN, USER).
      */
+    @NotNull
+    @Size(min = 2, max = 50)
     @Column(nullable = false, length = 50)
     private String role;
 

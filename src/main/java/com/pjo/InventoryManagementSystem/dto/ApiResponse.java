@@ -2,6 +2,7 @@ package com.pjo.InventoryManagementSystem.dto;
 
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ public class ApiResponse<T> {
     /**
      * Status of the response (e.g., "success", "error").
      */
+    @NotNull
     private String status;
     /**
      * Response data payload.
@@ -26,6 +28,7 @@ public class ApiResponse<T> {
     /**
      * Time when the response was generated.
      */
+    @NotNull
     private LocalDateTime timestamp;
 
     public ApiResponse() {

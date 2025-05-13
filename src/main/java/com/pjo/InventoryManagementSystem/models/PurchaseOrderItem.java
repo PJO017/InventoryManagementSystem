@@ -1,6 +1,8 @@
 package com.pjo.InventoryManagementSystem.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,18 +25,22 @@ public class PurchaseOrderItem {
     /**
      * Reference to the parent purchase order.
      */
+    @NotNull
     @ManyToOne
     private PurchaseOrder purchaseOrder;
 
     /**
      * Reference to the product being ordered.
      */
+    @NotNull
     @ManyToOne
     private Product product;
 
     /**
      * Quantity of the product ordered.
      */
+    @NotNull
+    @Min(1)
     @Column(nullable = false)
     private int quantity;
 

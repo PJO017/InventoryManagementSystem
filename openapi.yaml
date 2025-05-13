@@ -1,0 +1,354 @@
+components:
+    schemas:
+        Account:
+            properties:
+                createdAt:
+                    type: string
+                id:
+                    type: integer
+                password:
+                    type: string
+                role:
+                    type: string
+                updatedAt:
+                    type: string
+                username:
+                    type: string
+            type: object
+        ApiError:
+            properties:
+                error:
+                    type: string
+                message:
+                    type: string
+                path:
+                    type: string
+                status:
+                    type: integer
+                timestamp:
+                    type: string
+            type: object
+        ApiResponse:
+            properties:
+                message:
+                    type: string
+                status:
+                    type: string
+                timestamp:
+                    type: string
+            type: object
+        GlobalExceptionHandler:
+            properties: {}
+            type: object
+        Product:
+            properties:
+                createdAt:
+                    type: string
+                description:
+                    type: string
+                id:
+                    type: integer
+                name:
+                    type: string
+                price:
+                    type: number
+                stockQuantity:
+                    type: integer
+                updatedAt:
+                    type: string
+            type: object
+        ProductDTO:
+            properties:
+                description:
+                    type: string
+                name:
+                    type: string
+                price:
+                    type: number
+                stockQuantity:
+                    type: integer
+            type: object
+        PurchaseOrder:
+            properties:
+                createdAt:
+                    type: string
+                id:
+                    type: integer
+                orderDate:
+                    type: string
+                status:
+                    $ref: '#/components/schemas/PurchaseOrderStatus'
+                totalAmount:
+                    type: number
+                updatedAt:
+                    type: string
+            type: object
+        PurchaseOrderDTO:
+            properties:
+                items:
+                    items:
+                        $ref: '#/components/schemas/PurchaseOrderItemDTO'
+                    type: array
+                status:
+                    $ref: '#/components/schemas/PurchaseOrderStatus'
+            type: object
+        PurchaseOrderItem:
+            properties:
+                createdAt:
+                    type: string
+                id:
+                    type: integer
+                product:
+                    $ref: '#/components/schemas/Product'
+                purchaseOrder:
+                    $ref: '#/components/schemas/PurchaseOrder'
+                quantity:
+                    type: integer
+                updatedAt:
+                    type: string
+            type: object
+        PurchaseOrderItemDTO:
+            properties:
+                id:
+                    type: integer
+                productId:
+                    type: integer
+                purchaseOrderId:
+                    type: integer
+                quantity:
+                    type: integer
+            type: object
+        PurchaseOrderStatus:
+            enum:
+                - DRAFT
+                - SUBMITTED
+                - UNDER_REVIEW
+                - APPROVED
+                - REJECTED
+                - CANCELED
+            type: string
+        Supplier:
+            properties:
+                contactInfo:
+                    type: string
+                createdAt:
+                    type: string
+                id:
+                    type: integer
+                name:
+                    type: string
+                updatedAt:
+                    type: string
+            type: object
+info:
+    title: API
+    version: 1.0.0
+openapi: 3.0.0
+paths:
+    /api/products:
+        get:
+            parameters: []
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                allOf:
+                                    - $ref: '#/components/schemas/ApiResponse'
+                                    - properties:
+                                        data:
+                                            items:
+                                                $ref: '#/components/schemas/Product'
+                                            type: array
+                    description: Successful Response
+        post:
+            parameters: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ProductDTO'
+                required: true
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                allOf:
+                                    - $ref: '#/components/schemas/ApiResponse'
+                                    - properties:
+                                        data:
+                                            $ref: '#/components/schemas/Product'
+                    description: Successful Response
+    /api/products/{id}:
+        delete:
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                    type: integer
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ApiResponse'
+                    description: Successful Response
+        get:
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                    type: integer
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                allOf:
+                                    - $ref: '#/components/schemas/ApiResponse'
+                                    - properties:
+                                        data:
+                                            $ref: '#/components/schemas/Product'
+                    description: Successful Response
+        put:
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                    type: integer
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ProductDTO'
+                required: true
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                allOf:
+                                    - $ref: '#/components/schemas/ApiResponse'
+                                    - properties:
+                                        data:
+                                            $ref: '#/components/schemas/Product'
+                    description: Successful Response
+    /api/purchase-orders:
+        get:
+            parameters: []
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                allOf:
+                                    - $ref: '#/components/schemas/ApiResponse'
+                                    - properties:
+                                        data:
+                                            items:
+                                                $ref: '#/components/schemas/PurchaseOrder'
+                                            type: array
+                    description: Successful Response
+        post:
+            parameters: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PurchaseOrderDTO'
+                required: true
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                allOf:
+                                    - $ref: '#/components/schemas/ApiResponse'
+                                    - properties:
+                                        data:
+                                            $ref: '#/components/schemas/PurchaseOrder'
+                    description: Successful Response
+    /api/purchase-orders/{id}:
+        delete:
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                    type: integer
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ApiResponse'
+                    description: Successful Response
+        get:
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                    type: integer
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                allOf:
+                                    - $ref: '#/components/schemas/ApiResponse'
+                                    - properties:
+                                        data:
+                                            $ref: '#/components/schemas/PurchaseOrder'
+                    description: Successful Response
+        put:
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PurchaseOrderDTO'
+                required: true
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                allOf:
+                                    - $ref: '#/components/schemas/ApiResponse'
+                                    - properties:
+                                        data:
+                                            $ref: '#/components/schemas/PurchaseOrder'
+                    description: Successful Response
+    /api/purchase-orders/{id}/items:
+        get:
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                    type: integer
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                allOf:
+                                    - $ref: '#/components/schemas/ApiResponse'
+                                    - properties:
+                                        data:
+                                            items:
+                                                $ref: '#/components/schemas/PurchaseOrderItemDTO'
+                                            type: array
+                    description: Successful Response
+servers:
+    - url: https://api.example.com

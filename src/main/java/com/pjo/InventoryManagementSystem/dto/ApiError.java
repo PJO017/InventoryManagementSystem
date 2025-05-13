@@ -2,6 +2,7 @@ package com.pjo.InventoryManagementSystem.dto;
 
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,22 +15,27 @@ public class ApiError {
     /**
      * HTTP status code.
      */
+    @NotNull
     private int status;
     /**
      * Error type or summary.
      */
+    @NotNull
     private String error;
     /**
      * Detailed error message.
      */
+    @NotNull
     private String message;
     /**
      * Request path where the error occurred.
      */
+    @NotNull
     private String path;
     /**
      * Time when the error occurred.
      */
+    @NotNull
     private LocalDateTime timestamp;
 
     public ApiError() {

@@ -14,28 +14,49 @@ import jakarta.persistence.TemporalType;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Represents a purchase order in the system.
+ */
 @Entity
 @Getter
 @Setter
 public class PurchaseOrder {
+    /**
+     * Unique identifier for the purchase order.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Status of the purchase order (see PurchaseOrderStatus).
+     */
     @Column(nullable = false, length = 50)
     private PurchaseOrderStatus status;
 
+    /**
+     * Total amount for the order.
+     */
     @Column(nullable = false)
     private Double totalAmount;
 
+    /**
+     * Date/time when the order was placed.
+     */
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime orderDate;
 
+    /**
+     * Timestamp when the order was created.
+     */
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
 
+    /**
+     * Timestamp when the order was last updated.
+     */
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;

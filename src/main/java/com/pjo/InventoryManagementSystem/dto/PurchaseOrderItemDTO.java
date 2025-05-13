@@ -5,12 +5,27 @@ import com.pjo.InventoryManagementSystem.models.PurchaseOrderItem;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * DTO for transferring purchase order item data.
+ */
 @Getter
 @Setter
 public class PurchaseOrderItemDTO {
+    /**
+     * Item identifier.
+     */
     private Long id;
-    private Long purchaseOrderId; 
-    private Long productId; 
+    /**
+     * ID of the parent purchase order.
+     */
+    private Long purchaseOrderId;
+    /**
+     * ID of the product.
+     */
+    private Long productId;
+    /**
+     * Quantity ordered.
+     */
     private int quantity;
 
     public PurchaseOrderItemDTO() {

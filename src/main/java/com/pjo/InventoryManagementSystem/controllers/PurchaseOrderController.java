@@ -33,6 +33,11 @@ public class PurchaseOrderController {
         this.purchaseOrderService = purchaseOrderService;
     }
 
+    /**
+     * Retrieves all purchase orders.
+     *
+     * @return ApiResponse containing the list of all purchase orders.
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<List<PurchaseOrder>> getAllPurchaseOrders() {
@@ -41,6 +46,12 @@ public class PurchaseOrderController {
         return new ApiResponse<>("success", purchaseOrders, "Purchase orders retrieved successfully");
     }
 
+    /**
+     * Retrieves a purchase order by its ID.
+     *
+     * @param id the ID of the purchase order to retrieve
+     * @return ApiResponse containing the requested purchase order
+     */
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<PurchaseOrder> getPurchaseOrder(@PathVariable("id") Long id) {
@@ -49,6 +60,12 @@ public class PurchaseOrderController {
         return new ApiResponse<>("success", purchaseOrder, "Purchase order retrieved successfully");
     }
 
+    /**
+     * Retrieves all items for a specific purchase order.
+     *
+     * @param id the ID of the purchase order
+     * @return ApiResponse containing the list of items for the purchase order
+     */
     @GetMapping("/{id}/items")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<List<PurchaseOrderItemDTO>> getPurchaseOrderItems(@PathVariable("id") Long id) {
@@ -57,6 +74,12 @@ public class PurchaseOrderController {
         return new ApiResponse<>("success", items, "Purchase order items retrieved successfully");
     }
 
+    /**
+     * Creates a new purchase order.
+     *
+     * @param purchaseOrderDTO the purchase order data to create
+     * @return ApiResponse containing the created purchase order
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<PurchaseOrder> savePurchaseOrder(@RequestBody PurchaseOrderDTO purchaseOrderDTO) {
@@ -65,6 +88,13 @@ public class PurchaseOrderController {
         return new ApiResponse<>("success", purchaseOrder, "Purchase order created successfully");
     }
 
+    /**
+     * Updates an existing purchase order by its ID.
+     *
+     * @param id               the ID of the purchase order to update
+     * @param purchaseOrderDTO the updated purchase order data
+     * @return ApiResponse containing the updated purchase order
+     */
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<PurchaseOrder> updatePurchaseOrder(@PathVariable("id") String id,
@@ -75,6 +105,12 @@ public class PurchaseOrderController {
         return new ApiResponse<>("success", updatedOrder, "Purchase order updated successfully");
     }
 
+    /**
+     * Deletes a purchase order by its ID.
+     *
+     * @param id the ID of the purchase order to delete
+     * @return ApiResponse indicating the result of the deletion
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<?> deletePurchaseOrder(@PathVariable("id") Long id) {

@@ -23,6 +23,11 @@ public class ProductController {
 		this.productService = productService;
 	}
 
+	/**
+	 * Retrieves all products.
+	 *
+	 * @return ApiResponse containing the list of all products.
+	 */
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public ApiResponse<List<Product>> getAllProducts() {
@@ -31,6 +36,12 @@ public class ProductController {
 		return new ApiResponse<>("success", products, "Products retrieved successfully");
 	}
 
+	/**
+	 * Retrieves a product by its ID.
+	 *
+	 * @param id the ID of the product to retrieve
+	 * @return ApiResponse containing the requested product
+	 */
 	@GetMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public ApiResponse<Product> getProduct(@PathVariable("id") Long id) {
@@ -39,6 +50,12 @@ public class ProductController {
 		return new ApiResponse<>("success", product, "Product retrieved successfully");
 	}
 
+	/**
+	 * Creates a new product.
+	 *
+	 * @param productDTO the product data to create
+	 * @return ApiResponse containing the created product
+	 */
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ApiResponse<Product> saveProduct(@RequestBody ProductDTO productDTO) {
@@ -47,6 +64,13 @@ public class ProductController {
 		return new ApiResponse<>("success", product, "Product created successfully");
 	}
 
+	/**
+	 * Updates an existing product by its ID.
+	 *
+	 * @param id         the ID of the product to update
+	 * @param productDTO the updated product data
+	 * @return ApiResponse containing the updated product
+	 */
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public ApiResponse<Product> updateProduct(@PathVariable("id") Long id, @RequestBody ProductDTO productDTO) {
@@ -55,6 +79,12 @@ public class ProductController {
 		return new ApiResponse<>("success", product, "Product updated successfully");
 	}
 
+	/**
+	 * Deletes a product by its ID.
+	 *
+	 * @param id the ID of the product to delete
+	 * @return ApiResponse indicating the result of the deletion
+	 */
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public ApiResponse<?> deleteProduct(@PathVariable("id") Long id) {
